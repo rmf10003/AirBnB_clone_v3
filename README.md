@@ -158,5 +158,15 @@ Alexa Orrico - [Github](https://github.com/alexaorrico) / [Twitter](https://twit
 Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://twitter.com/earthtojhuang)
 
 Second part of Airbnb: Joann Vuong
+
+## Third part of Airbnb: Airbnb_clone_v3
+# Kyle Litscher 
+    [Github](https://github.com/klitscher)
+    [Twitter](https://twitter.com/Coding_KGL)
+    [Email] (kyle.litscher@holbertonschool.com)    
+# Rory Fahy 
+    [Github](https://github.com/rmf10003)
+    [Twitter](https://twitter.com/rory_chillmore)
+    [Email] (rory.fahy@holbertonschool.com)
 ## License
 Public Domain. No copy write protection. 
