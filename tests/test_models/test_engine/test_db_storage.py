@@ -68,8 +68,8 @@ test_db_storage.py'])
                             "{:s} method needs a docstring".format(func[0]))
 
 
-class TestFileStorage(unittest.TestCase):
-    """Test the FileStorage class"""
+class TestDBStorage(unittest.TestCase):
+    """Test the DBStorage class"""
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
@@ -86,3 +86,75 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get_none(self):
+        """Test that get retunrs None on not id or object not found"""
+        storage = DBStorage()
+        storage.reload()
+        for key in storage.all():
+            obj_type, dot, obj_id = key.partition('.')
+            break
+
+        obj = storage.get('', '')
+        self.assertEqual(obj, None)
+
+        obj = storage.get('', obj_id)
+        self.assertEqual(obj, None)
+
+        obj = storage.get(obj_type, '')
+        self.assertEqual(obj, None)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get_error(self):
+        """Test that get only accepts two arguments"""
+        storage = DBStorage()
+        storage.reload()
+        for key in storage.all():
+            obj_type = key.split('.')[0]
+            obj_id = key.split('.')[1]
+            break
+        with self.assertRaises(TypeError):
+            storage.get()
+        with self.assertRaises(TypeError):
+            storage.get(obj_type)
+        with self.assertRaises(TypeError):
+            storage.get(obj_type, obj_id, 'test')
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get_succeed(self):
+        """Test that get works succesfully"""
+        storage = DBStorage()
+        storage.reload()
+        for key in storage.all():
+            obj_type = key.split('.')[0]
+            obj_id = key.split('.')[1]
+            break
+        obj1 = storage.get(obj_type, obj_id)
+        obj2 = storage.all()[obj_type + '.' + obj_id]
+        self.assertEqual(obj1, obj2)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count_error(self):
+        """Test that count fails correctly"""
+        storage = DBStorage()
+        storage.reload()
+        for key in storage.all():
+            obj_type = key.split('.')[0]
+            obj_id = key.split('.')[1]
+            break
+        with self.assertRaises(TypeError):
+            storage.count(obj_type, obj_id)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
+    def test_count_succeed(self):
+        """Test that count returns correctly"""
+        storage = DBStorage()
+        storage.reload()
+        for key in storage.all():
+            obj_type = key.split('.')[0]
+            obj_id = key.split('.')[1]
+            break
+
+        self.assertEqual(len(storage.all()), storage.count())
+        self.assertEqual(len(storage.all(obj_type)), storage.count(obj_type))
