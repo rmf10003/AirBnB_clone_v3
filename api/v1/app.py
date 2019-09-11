@@ -1,7 +1,7 @@
 #!usr/bin/python3
 """Module for api"""
 
-from flask import Flask
+from flask import Flask, jsonify
 from models import storage
 from api.v1.views import app_views
 import os
@@ -15,9 +15,14 @@ def teardown(self):
     """Method to close storage on teardown"""
     storage.close()
 
+@app.errorhandler(404)
+def not_found(error):
+    """Custom error handler"""
+    return (jsonify({"error": "Not found"}))
+
 
 if __name__ == '__main__':
     app.run(
-        host=os.getenv('HBNB_API_HOST'),
-        port=os.getenv('HBNB_API_PORT'),
+        host=os.getenv('HBNB_API_HOST', '0.0.0.0'),
+        port=os.getenv('HBNB_API_PORT', '5000'),
         threaded=True)
