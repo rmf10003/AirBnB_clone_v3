@@ -80,7 +80,11 @@ def place_change(place_id):
         s, p, id = key.partition('.')
         if id == place_id:
             for k, v in request.get_json().items():
-                if k not in ('id', 'user_id', 'city_id', 'created_at', 'updated_at'):
+                if k not in (
+                        'id', 'user_id',
+                        'city_id', 'created_at',
+                        'updated_at'
+                ):
                     setattr(places[key], k, v)
             models.storage.save()
             return (jsonify(places[key].to_dict()))
