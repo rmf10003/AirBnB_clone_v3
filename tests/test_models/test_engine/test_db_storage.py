@@ -70,6 +70,12 @@ test_db_storage.py'])
 
 class TestDBStorage(unittest.TestCase):
     """Test the DBStorage class"""
+
+    @classmethod
+    def setUpClass(cls):
+        """Method to set up the tests"""
+
+
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
@@ -90,8 +96,7 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get_none(self):
         """Test that get retunrs None on not id or object not found"""
-        storage = DBStorage()
-        storage.reload()
+        storage = models.storage
         for key in storage.all():
             obj_type, dot, obj_id = key.partition('.')
             break
@@ -108,7 +113,7 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get_error(self):
         """Test that get only accepts two arguments"""
-        storage = DBStorage()
+        storage = models.storage
         storage.reload()
         for key in storage.all():
             obj_type = key.split('.')[0]
@@ -124,7 +129,7 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get_succeed(self):
         """Test that get works succesfully"""
-        storage = DBStorage()
+        storage = models.storage
         storage.reload()
         for key in storage.all():
             obj_type = key.split('.')[0]
@@ -137,7 +142,7 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count_error(self):
         """Test that count fails correctly"""
-        storage = DBStorage()
+        storage = models.storage
         storage.reload()
         for key in storage.all():
             obj_type = key.split('.')[0]
@@ -149,7 +154,7 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
     def test_count_succeed(self):
         """Test that count returns correctly"""
-        storage = DBStorage()
+        storage = models.storage
         storage.reload()
         for key in storage.all():
             obj_type = key.split('.')[0]
