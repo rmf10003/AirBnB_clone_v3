@@ -49,3 +49,19 @@ def state_create():
     models.storage.new(state)
     models.storage.save()
     return (jsonify(state.to_dict()))
+
+@app_views.route('/states/<state_id>', methods=['PUT'])
+def state_change(state_id):
+    """update a state object"""
+    if not request.get_json():
+       abort(400, "Not a JSON")
+    states = models.storage.all('State')
+    for key in states.keys():
+        s, p, id = key.partition('.')
+        if id == state_id:
+            for k, v in request.get_json().items():
+                if k not in ('id', 'created_at', 'updated_at'):
+                    setattr(states[key], k, v) 
+            models.storage.save()
+            return (jsonify(states[key].to_dict()))
+    abort(404)    
