@@ -7,7 +7,7 @@ from api.v1.views import app_views
 
 
 @app_views.route('/states', strict_slashes=False, methods=['GET'])
-def all_states():
+def state_all():
     """Retrives a list of all state objects"""
     states = models.storage.all('State')
     state_list = []
@@ -16,7 +16,7 @@ def all_states():
     return (jsonify(state_list))
 
 @app_views.route('/states/<state_id>', methods=['GET'])
-def grab_state(state_id):
+def state_grab(state_id):
     """grab one state based on ID"""
     states = models.storage.all('State')
     for key in states.keys():
@@ -26,7 +26,7 @@ def grab_state(state_id):
     abort(404)
 
 @app_views.route('/states/<state_id>', methods=['DELETE'])
-def del_state(state_id):
+def state_del(state_id):
     """delete a state object"""
     states = models.storage.all('State')
     for key in states.keys():
@@ -36,3 +36,16 @@ def del_state(state_id):
             models.storage.save()
             return (jsonify({}))
     abort(404)
+
+@app_views.route('/states', strict_slashes=False, methods=['POST'])
+def state_create():
+    """Creates a state Object"""
+    if not request.get_json():
+         abort(400, "Not a JSON")
+    if not 'name' in request.get_json():
+         abort(400, "Missing name")
+    name = request.get_json()
+    state = models.state.State(**name)
+    models.storage.new(state)
+    models.storage.save()
+    return (jsonify(state.to_dict()))
