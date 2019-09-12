@@ -74,6 +74,19 @@ class TestDBStorage(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Method to set up the tests"""
+        state = State(name='state_test')
+        city = City(state_id=state.id, name='city_test')
+        user = User(email='test@email.com', password='password123')
+        place = Place(user_id=user.id, city_id=city.id, name='place_test')
+        review = Review(user_id=user.id, place_id=place.id, text='test_review')
+        amenity = Amenity(place_id=place.id, name='amenity_test')
+        models.storage.new(state)
+        models.storage.new(city)
+        models.storage.new(user)
+        models.storage.new(place)
+        models.storage.new(review)
+        models.storage.new(amenity)
+        models.storage.save()
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
