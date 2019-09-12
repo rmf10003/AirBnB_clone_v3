@@ -38,7 +38,7 @@ def amenity_place_del(place_id, amenity_id):
     place = places.get(place_key)
     for amenity in place.amenities:
         if amenity_id == amenity.id:
-            models.storage.delete(amenity)
+            amenity.delete()
             models.storage.save()
             return (jsonify({}))
     abort(404)
