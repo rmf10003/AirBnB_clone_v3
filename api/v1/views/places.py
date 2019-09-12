@@ -65,9 +65,13 @@ def place_create(city_id):
         abort(404)
     name = request.get_json()
     place = models.place.Place(city_id=city_id, **name)
-    models.storage.new(place)
-    models.storage.save()
-    return make_response(jsonify(place.to_dict()), 201)
+    users = models.storage.all('User')
+    for user in users.values():
+        if place.user_id == user.id:
+            models.storage.new(place)
+            models.storage.save()
+            return make_response(jsonify(place.to_dict()), 201)
+    abort(404)
 
 
 @app_views.route('/places/<place_id>', methods=['PUT'])
