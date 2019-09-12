@@ -34,7 +34,7 @@ def amenity_place_del(place_id, amenity_id):
     if place_key not in places.keys():
         abort(404)
     if amenity_key not in amenities.keys():
-        abort(400)
+        abort(404)
     place = places.get(place_key)
     for amenity in place.amenities:
         if amenity_id == amenity.id:
@@ -56,7 +56,7 @@ def amenity_link(place_id, amenity_id):
     if place_key not in places.keys():
         abort(404)
     if amenity_key not in amenities.keys():
-        abort(400)
+        abort(404)
     place = places.get(place_key)
     for amenity in place.amenities:
         if amenity_id == amenity.id:
