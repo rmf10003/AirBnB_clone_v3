@@ -61,5 +61,6 @@ def amenity_link(place_id, amenity_id):
     for amenity in place.amenities:
         if amenity_id == amenity.id:
             return jsonify(amenity.to_dict())
-    json_dict = jsonify(place.amenities.append(amenities[amenity_key]))
+    place.amenities.append(amenities[amenity_key])
+    json_dict = jsonify(amenities[amenity_key].to_dict())
     return make_response(json_dict, 201)
