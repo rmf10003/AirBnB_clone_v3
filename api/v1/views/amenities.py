@@ -2,7 +2,7 @@
 """Module to handle state restful API actions"""
 
 import models
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, make_response
 from api.v1.views import app_views
 
 
@@ -51,7 +51,7 @@ def amenity_create():
     amenity = models.amenity.Amenity(**name)
     models.storage.new(amenity)
     models.storage.save()
-    return (jsonify(amenity.to_dict()))
+    return make_response(jsonify(amenity.to_dict()), 201)
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['PUT'])

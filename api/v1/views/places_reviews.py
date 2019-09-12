@@ -2,7 +2,7 @@
 """Module to handle review restful API actions"""
 
 import models
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, make_response
 from api.v1.views import app_views
 
 
@@ -65,7 +65,7 @@ def review_create(place_id):
     review = models.review.Review(place_id=place_id, **name)
     models.storage.new(review)
     models.storage.save()
-    return (jsonify(review.to_dict()))
+    return make_response(jsonify(review.to_dict()), 201)
 
 
 @app_views.route('/reviews/<review_id>', methods=['PUT'])
