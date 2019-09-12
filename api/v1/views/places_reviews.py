@@ -54,8 +54,10 @@ def review_create(place_id):
     """Creates a review Object"""
     if not request.get_json():
         abort(400, "Not a JSON")
-    if 'name' not in request.get_json():
-        abort(400, "Missing name")
+    if 'user_id' not in request.get_json():
+        abort(400, "Missing user_id")
+    if 'text' not in request.get_json():
+        abort(400, "Missing text")
     places = models.storage.all('Place')
     place_key = 'Place.' + place_id
     review_list = []
@@ -63,9 +65,13 @@ def review_create(place_id):
         abort(404)
     name = request.get_json()
     review = models.review.Review(place_id=place_id, **name)
-    models.storage.new(review)
-    models.storage.save()
-    return make_response(jsonify(review.to_dict()), 201)
+    users = models.storage.all('User')
+    for user in users.values():
+        if review.user_id == user.id:
+            models.storage.new(review)
+            models.storage.save()
+            return make_response(jsonify(review.to_dict()), 201)
+    abort(404)
 
 
 @app_views.route('/reviews/<review_id>', methods=['PUT'])
