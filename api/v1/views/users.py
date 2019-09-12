@@ -2,7 +2,7 @@
 """Module to handle state restful API actions"""
 
 import models
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, make_response
 from api.v1.views import app_views
 
 
@@ -53,7 +53,7 @@ def user_create():
     user = models.user.User(**name)
     models.storage.new(user)
     models.storage.save()
-    return (jsonify(user.to_dict()))
+    return make_response(jsonify(user.to_dict()), 201)
 
 
 @app_views.route('/users/<user_id>', methods=['PUT'])

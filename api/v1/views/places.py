@@ -2,7 +2,7 @@
 """Module to handle place restful API actions"""
 
 import models
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, make_response
 from api.v1.views import app_views
 
 
@@ -67,7 +67,7 @@ def place_create(city_id):
     place = models.place.Place(city_id=city_id, **name)
     models.storage.new(place)
     models.storage.save()
-    return (jsonify(place.to_dict()))
+    return make_response(jsonify(place.to_dict()), 201)
 
 
 @app_views.route('/places/<place_id>', methods=['PUT'])
