@@ -2,7 +2,7 @@
 """Module to handle city restful API actions"""
 
 import models
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, make_response
 from api.v1.views import app_views
 
 
@@ -65,7 +65,7 @@ def city_create(state_id):
     city = models.city.City(state_id=state_id, **name)
     models.storage.new(city)
     models.storage.save()
-    return (jsonify(city.to_dict()))
+    return make_response(jsonify(city.to_dict()), 201)
 
 
 @app_views.route('/cities/<city_id>', methods=['PUT'])
